@@ -24,7 +24,12 @@ function Ant() {
             {x: this.pos.x - 1, y: this.pos.y},
             {x: this.pos.x + 1, y: this.pos.y},
             {x: this.pos.x, y: this.pos.y - 1},
-            {x: this.pos.x, y: this.pos.y + 1}
+            {x: this.pos.x, y: this.pos.y + 1},
+
+            {x: this.pos.x - 1, y: this.pos.y - 1},
+            {x: this.pos.x + 1, y: this.pos.y - 1},
+            {x: this.pos.x - 1, y: this.pos.y + 1},
+            {x: this.pos.x + 1, y: this.pos.y + 1}
         ];
 
         destinations.forEach(({x, y}) => {

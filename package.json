@@ -1,0 +1,14 @@
+{
+  "name": "p5-ants",
+  "version": "1.0.0",
+  "description": "",
+  "main": "sketch.js",
+  "scripts": {
+    "dev": "npx light-server -s . -w \"**/*\""
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "light-server": "^2.8.0"
+  }
+}

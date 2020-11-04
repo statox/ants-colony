@@ -4,7 +4,8 @@ let scale;
 let nbAnts = 20;
 let ants = [];
 let appSettings = {
-    showWalking: false,
+    showWalking: true,
+    showExploredCells: true,
     // These two constants are used to weight the desirability and pheromones in totalAttraction of cells
     desirabilityFactor: 1,
     pheromonesFactor: 10,

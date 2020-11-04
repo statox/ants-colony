@@ -26,7 +26,8 @@ function Grid(D) {
          */
         // Generate a target in a circle radius
         const pos = p5.Vector.random2D();
-        pos.setMag(random() * D * 0.5);
+        const mag = map(Math.random(), 0, 1, D * 0.1, D * 0.4);
+        pos.setMag(mag);
         pos.add(new p5.Vector(D / 2, D / 2));
         const x = parseInt(pos.x);
         const y = parseInt(pos.y);
@@ -55,11 +56,14 @@ function Grid(D) {
                     // Gradient on the amount of pheromones
                     const paint = map(this.cells[y][x].pheromones, 0, this.currentMaxPheromones, 250, 10);
                     fill(paint, 250, paint);
-                    // const alpha = map(this.cells[y][x].pheromones, 0, this.currentMaxPheromones, 0, 1);
-                    // fill(`rgba(160, 221, 140, ${alpha})`);
+                }
+
+                if (x === startingPoint.x && y === startingPoint.y) {
+                    fill(250, 0, 0);
                 }
 
                 stroke('rgba(0, 0, 0, 0.2)');
+
                 square(x * scale, y * scale, scale);
 
                 if (this.cells[y][x].desirability > 1) {

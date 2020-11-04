@@ -1,3 +1,5 @@
+// I used this to develop the ant.chooseDestination function
+// Not useful anymore but maybe at some point I'll use it again
 function Test() {
     let ant = new Ant();
 

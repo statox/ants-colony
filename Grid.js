@@ -1,12 +1,10 @@
-function Grid(D, nbTargets) {
+function Grid(D) {
     this.D = D;
-    this.nbTargets = nbTargets;
     this.targets = [];
     this.cells = [];
     this.evaporationCoefficient = 0.8; // between 0 and 1
     this.currentMaxPheromones = 0;
-    this.maxDesirability = 200; // Initial desirability for targets
-    this.nbTargets = 5;
+    this.maxDesirability = 500; // Initial desirability for targets
 
     for (let y = 0; y < this.D; y++) {
         this.cells.push([]);
@@ -16,14 +14,22 @@ function Grid(D, nbTargets) {
     }
 
     this.createTargets = () => {
-        for (_ = 0; _ < this.nbTargets; _++) {
+        for (_ = 0; _ < appSettings.nbTargets; _++) {
             this.createTarget();
         }
     };
 
     this.createTarget = () => {
-        const x = parseInt(random(D));
-        const y = parseInt(random(D));
+        /*
+         * const x = parseInt(random(D));
+         * const y = parseInt(random(D));
+         */
+        // Generate a target in a circle radius
+        const pos = p5.Vector.random2D();
+        pos.setMag(random() * D * 0.5);
+        pos.add(new p5.Vector(D / 2, D / 2));
+        const x = parseInt(pos.x);
+        const y = parseInt(pos.y);
 
         // Avoid selecting a cell which is already a target
         if (this.cells[y][x].desirability > 1) {
@@ -37,12 +43,9 @@ function Grid(D, nbTargets) {
             for (let x = 0; x < this.D; x++) {
                 if (this.cells[y][x].desirability > 1) {
                     // Targets are blue with brightness depending on how desirable they are
-                    const rg = map(this.cells[y][x].desirability, 0, this.maxDesirability, 200, 100);
-                    const b = map(this.cells[y][x].desirability, 0, this.maxDesirability, 200, 200);
+                    const rg = map(this.cells[y][x].desirability, 1, this.maxDesirability, 200, 100);
+                    const b = map(this.cells[y][x].desirability, 1, this.maxDesirability, 200, 200);
                     fill(rg, rg, b);
-                } else if (this.cells[y][x].desirability < 0) {
-                    // Walls are black
-                    fill(0, 0, 0);
                 } else if (this.cells[y][x].pheromones === 0) {
                     // Empty are white
                     fill(250, 250, 250);
@@ -51,7 +54,9 @@ function Grid(D, nbTargets) {
                 } else {
                     // Gradient on the amount of pheromones
                     const paint = map(this.cells[y][x].pheromones, 0, this.currentMaxPheromones, 250, 10);
-                    fill(250, paint, 250);
+                    fill(paint, 250, paint);
+                    // const alpha = map(this.cells[y][x].pheromones, 0, this.currentMaxPheromones, 0, 1);
+                    // fill(`rgba(160, 221, 140, ${alpha})`);
                 }
 
                 stroke('rgba(0, 0, 0, 0.2)');
@@ -71,6 +76,9 @@ function Grid(D, nbTargets) {
         for (let y = 0; y < this.D; y++) {
             for (let x = 0; x < this.D; x++) {
                 this.cells[y][x].pheromones *= 1 - this.evaporationCoefficient;
+                if (this.cells[y][x].pheromones < 1) {
+                    this.cells[y][x].pheromones = 0;
+                }
             }
         }
 

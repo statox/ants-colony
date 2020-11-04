@@ -1,6 +1,3 @@
-// These two constants are used to weight the desirability and pheromones in totalAttraction
-const desirabilityFactor = 1;
-const pheromonesFactor = 5;
 function Cell(x, y, desirability, pheromones) {
     this.pos = new p5.Vector(x, y);
     this.desirability = desirability || 1;
@@ -9,6 +6,7 @@ function Cell(x, y, desirability, pheromones) {
     this.totalAttraction = 0;
 
     this.updateAttraction = () => {
+        const {desirabilityFactor, pheromonesFactor} = appSettings;
         this.totalAttraction =
             Math.pow(this.desirability, desirabilityFactor) + Math.pow(this.pheromones, pheromonesFactor);
     };

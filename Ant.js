@@ -1,6 +1,6 @@
 function Ant() {
     // this.pos = new p5.Vector(parseInt(D / 2), D - 1);
-    this.pos = new p5.Vector(parseInt(D / 2), parseInt(D / 2));
+    this.pos = startingPoint;
     this.offset = p5.Vector.random2D();
     this.offset.setMag(random(scale));
     this.ttl = 400;
@@ -9,7 +9,7 @@ function Ant() {
     this.foundTarget = false;
 
     this.reset = () => {
-        this.pos = new p5.Vector(parseInt(D / 2), parseInt(D / 2));
+        this.pos = startingPoint;
         this.ttl = 100;
         this.path = [];
         this.pathKeys = new Set();
@@ -59,15 +59,12 @@ function Ant() {
 
         const selectedScore = Math.random() * totalScore;
 
-        // console.log(cumulatedScores);
-        // console.log(selectedScore);
         for (let i = 0; i < neighbors.length; i++) {
             if (selectedScore <= cumulatedScores[i]) {
                 // console.log('chosen', i);
                 return neighbors[i];
             }
         }
-        // return this.chooseRandomDestination(neighbors);
     };
 
     this.chooseRandomDestination = (neighbors) => {
@@ -88,6 +85,7 @@ function Ant() {
         }
 
         const destination = this.chooseDestination(neighbors);
+        // const destination = this.chooseRandomDestination(neighbors);
         this.ttl--;
         this.pos = destination.pos;
         this.path.push(destination);

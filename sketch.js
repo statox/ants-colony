@@ -4,8 +4,13 @@ let scale;
 let nbAnts = 20;
 let ants = [];
 let appSettings = {
-    showWalking: true
+    showWalking: false,
+    // These two constants are used to weight the desirability and pheromones in totalAttraction of cells
+    desirabilityFactor: 1,
+    pheromonesFactor: 10,
+    nbTargets: 5 // nb of target cells to have constantly on the grid
 };
+let startingPoint = new p5.Vector(parseInt(D / 2), parseInt(D / 2));
 
 function vecKey(v) {
     return xyKey(v.x, v.y);
@@ -24,12 +29,10 @@ function windowResized() {
 }
 
 function setup() {
-    // Test();
-    // noLoop();
     createCanvas(700, 700);
     customResizeCanvas();
 
-    grid = new Grid(D, 10);
+    grid = new Grid(D, 1);
     grid.createTargets();
 
     for (let _ = 0; _ < nbAnts; _++) {

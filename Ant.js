@@ -3,14 +3,14 @@ function Ant() {
     this.pos = startingPoint;
     this.offset = p5.Vector.random2D();
     this.offset.setMag(random(width / D / 2));
-    this.ttl = 400;
+    this.ttl = appSettings.antTTL;
     this.path = [];
     this.pathKeys = new Set();
     this.foundTarget = false;
 
     this.reset = () => {
         this.pos = startingPoint;
-        this.ttl = 100;
+        this.ttl = appSettings.antTTL;
         this.path = [];
         this.pathKeys = new Set();
         this.foundTarget = false;

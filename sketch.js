@@ -6,7 +6,9 @@ let ants = [];
 let appSettings = {
     showWalking: false,
     showExploredCells: true,
+    showTargetQuantity: false,
     antPerceptionRadius: 2,
+    antTTL: 50,
     targetMaxDesirability: 8000,
     // These two constants are used to weight the desirability and pheromones in totalAttraction of cells
     desirabilityFactor: 1,

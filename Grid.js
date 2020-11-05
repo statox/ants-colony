@@ -75,7 +75,9 @@ function Grid(D) {
                 if (this.cells[y][x].desirability > 1) {
                     fill(0, 0, 0);
                     stroke(0, 0, 0);
-                    text(this.cells[y][x].desirability, x * scale, y * scale);
+                    if (appSettings.showTargetQuantity) {
+                        text(this.cells[y][x].desirability, x * scale, y * scale);
+                    }
                 }
             }
         }

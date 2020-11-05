@@ -5,6 +5,7 @@ function Grid(D) {
     this.evaporationCoefficient = 0.8; // between 0 and 1
     this.currentMaxPheromones = 0;
     this.maxDesirability = 500; // Initial desirability for targets
+    this.visitedCells = new Set();
 
     for (let y = 0; y < this.D; y++) {
         this.cells.push([]);
@@ -62,7 +63,12 @@ function Grid(D) {
                     fill(250, 0, 0);
                 }
 
-                stroke('rgba(0, 0, 0, 0.2)');
+                // Change stroke to show visited cells
+                if (appSettings.showExploredCells && this.visitedCells.has(vecKey(this.cells[y][x].pos))) {
+                    stroke('rgba(50, 50, 50, 0.3)');
+                } else {
+                    stroke('rgba(50, 50, 50, 0.1)');
+                }
 
                 square(x * scale, y * scale, scale);
 
@@ -88,6 +94,7 @@ function Grid(D) {
 
         // Ants which found a target add pheromones proportionnaly to the length of their path
         const emptiedTarget = new Set();
+        this.visitedCells = new Set();
         ants.forEach((ant) => {
             if (ant.foundTarget) {
                 ant.path.forEach((c) => (c.pheromones += D * D - ant.path.length));
@@ -101,6 +108,9 @@ function Grid(D) {
                     emptiedTarget.add(vecKey(targetCell.pos));
                 }
             }
+
+            // Keep track of all the visited cells
+            ant.path.forEach((c) => this.visitedCells.add(vecKey(c.pos)));
         });
 
         // Regenerate a new target for each emptied one

@@ -2,7 +2,7 @@ function Ant() {
     // this.pos = new p5.Vector(parseInt(D / 2), D - 1);
     this.pos = startingPoint;
     this.offset = p5.Vector.random2D();
-    this.offset.setMag(random(scale));
+    this.offset.setMag(random(width / D / 2));
     this.ttl = 400;
     this.path = [];
     this.pathKeys = new Set();
@@ -61,7 +61,6 @@ function Ant() {
 
         for (let i = 0; i < neighbors.length; i++) {
             if (selectedScore <= cumulatedScores[i]) {
-                // console.log('chosen', i);
                 return neighbors[i];
             }
         }

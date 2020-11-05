@@ -4,7 +4,7 @@ function Grid(D) {
     this.cells = [];
     this.evaporationCoefficient = 0.8; // between 0 and 1
     this.currentMaxPheromones = 0;
-    this.maxDesirability = 500; // Initial desirability for targets
+    this.maxDesirability = appSettings.targetMaxDesirability; // Initial desirability for targets
     this.visitedCells = new Set();
 
     for (let y = 0; y < this.D; y++) {
@@ -67,7 +67,7 @@ function Grid(D) {
                 if (appSettings.showExploredCells && this.visitedCells.has(vecKey(this.cells[y][x].pos))) {
                     stroke('rgba(50, 50, 50, 0.3)');
                 } else {
-                    stroke('rgba(50, 50, 50, 0.1)');
+                    stroke('rgba(150, 150, 150, 0.1)');
                 }
 
                 square(x * scale, y * scale, scale);

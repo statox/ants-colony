@@ -1,15 +1,17 @@
 const D = 50;
 let grid;
 let scale;
-let nbAnts = 20;
+let nbAnts = 200;
 let ants = [];
 let appSettings = {
-    showWalking: true,
+    showWalking: false,
     showExploredCells: true,
+    antPerceptionRadius: 2,
+    targetMaxDesirability: 8000,
     // These two constants are used to weight the desirability and pheromones in totalAttraction of cells
     desirabilityFactor: 1,
     pheromonesFactor: 10,
-    nbTargets: 5 // nb of target cells to have constantly on the grid
+    nbTargets: 1 // nb of target cells to have constantly on the grid
 };
 let startingPoint = new p5.Vector(parseInt(D / 2), parseInt(D / 2));
 
@@ -44,6 +46,7 @@ function setup() {
 
 let walkingAnts;
 function draw() {
+    // frameRate(5);
     scale = width / grid.D;
     grid.draw();
 

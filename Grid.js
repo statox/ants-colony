@@ -44,6 +44,10 @@ function Grid(D) {
         this.cells[y][x].desirability = this.maxDesirability;
     };
 
+    this.removeTarget = (dx, dy) => {
+        this.cells[dy][dx].desirability = 1;
+    };
+
     this.createObstacles = () => {
         for (let x = 23; x < 28; x++) {
             this.cells[21][x].isObstacle = true;

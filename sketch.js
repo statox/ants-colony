@@ -101,10 +101,17 @@ function mousePressed() {
     if (mouseX < 0 || mouseX > width || mouseY < 0 || mouseY > height) {
         return;
     }
-    // Create a new target if the mouse is clicked
+    // Get the mouse position in the grid
     const mousePosition = new p5.Vector(mouseX, mouseY);
     const inGridPosition = mousePosition.div(scale);
-    inGridPosition.x = parseInt(inGridPosition.x);
-    inGridPosition.y = parseInt(inGridPosition.y);
-    grid.createTarget(inGridPosition.x, inGridPosition.y);
+    const x = parseInt(inGridPosition.x);
+    const y = parseInt(inGridPosition.y);
+    const c = grid.cells[y][x];
+    if (c.desirability < grid.maxDesirability && !c.isObstacle) {
+        // Create a new target if an empty cell is clicked
+        grid.createTarget(x, y);
+    } else if (c.desirability === grid.maxDesirability && !c.isObstacle) {
+        // Remove a target if it is clicked on
+        grid.removeTarget(x, y);
+    }
 }

@@ -48,14 +48,22 @@ function Grid(D) {
         this.cells[dy][dx].desirability = 1;
     };
 
+    this.createObstacle = (x, y) => {
+        this.cells[y][x].isObstacle = true;
+    };
+
+    this.removeObstacle = (x, y) => {
+        this.cells[y][x].isObstacle = false;
+    };
+
     this.createObstacles = () => {
         for (let x = 23; x < 28; x++) {
-            this.cells[21][x].isObstacle = true;
-            this.cells[31][x].isObstacle = true;
+            this.createObstacle(x, 21);
+            this.createObstacle(x, 31);
         }
         for (let y = 24; y < 29; y++) {
-            this.cells[y][22].isObstacle = true;
-            this.cells[y][28].isObstacle = true;
+            this.createObstacle(22, y);
+            this.createObstacle(28, y);
         }
     };
 

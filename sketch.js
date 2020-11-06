@@ -111,7 +111,11 @@ function mousePressed() {
         // Create a new target if an empty cell is clicked
         grid.createTarget(x, y);
     } else if (c.desirability === grid.maxDesirability && !c.isObstacle) {
-        // Remove a target if it is clicked on
+        // Replace a target by an obstacle if it is clicked on
         grid.removeTarget(x, y);
+        grid.createObstacle(x, y);
+    } else if (c.isObstacle) {
+        // Remove an obstacle if it is clicked on
+        grid.removeObstacle(x, y);
     }
 }

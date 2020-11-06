@@ -7,6 +7,7 @@ let appSettings = {
     showWalking: false,
     showExploredCells: true,
     showTargetQuantity: false,
+    showFPS: false,
     waitForSolution: true, // If true new target is regenerate only when a stable solution is found
     antPerceptionRadius: 2,
     antTTL: 50,
@@ -78,6 +79,13 @@ function draw() {
         fill(0);
         stroke(0);
         text('Found solution', 30, 30);
+    }
+
+    // Show FPS
+    if (appSettings.showFPS) {
+        fill(0);
+        stroke(0);
+        text(`FPS: ${parseInt(frameRate())}`, 30, height - 30);
     }
 }
 

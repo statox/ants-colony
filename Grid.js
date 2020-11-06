@@ -70,40 +70,36 @@ function Grid(D) {
     this.draw = () => {
         for (let y = 0; y < this.D; y++) {
             for (let x = 0; x < this.D; x++) {
-                if (this.cells[y][x].isObstacle) {
+                const c = this.cells[y][x];
+                if (c.isObstacle) {
                     // Obstacles are black
                     fill('rgba(0, 0, 0, 0.2)');
-                } else if (this.cells[y][x].desirability > 1) {
+                } else if (c.desirability > 1) {
                     // Targets are blue with brightness depending on how desirable they are
-                    const rg = map(this.cells[y][x].desirability, 1, this.maxDesirability, 200, 100);
-                    const b = map(this.cells[y][x].desirability, 1, this.maxDesirability, 200, 200);
+                    const rg = map(c.desirability, 1, this.maxDesirability, 200, 100);
+                    const b = map(c.desirability, 1, this.maxDesirability, 200, 200);
                     fill(rg, rg, b);
-                } else if (this.cells[y][x].pheromones === 0) {
+                } else if (c.pheromones === 0) {
                     // Empty are white
                     fill(250, 250, 250);
-                    // Using this get some interesting results to investigate
-                    // fill('rgba(250, 250, 250, 0.3)');
                 } else {
                     // Gradient on the amount of pheromones
-                    const paint = map(this.cells[y][x].pheromones, 0, this.currentMaxPheromones, 180, 10);
+                    const paint = map(c.pheromones, 0, this.currentMaxPheromones, 180, 10);
                     fill(paint, 250, paint);
                 }
 
                 // if we have a solution show it but not the target
-                if (
-                    this.isPathStabilized &&
-                    this.stablePath.has(vecKey(this.cells[y][x].pos)) &&
-                    this.cells[y][x].desirability <= 1
-                ) {
+                if (this.isPathStabilized && this.stablePath.has(vecKey(c.pos)) && c.desirability <= 1) {
                     fill(200, 180, 180);
                 }
 
+                // Show the starting point
                 if (x === startingPoint.x && y === startingPoint.y) {
                     fill(250, 0, 0);
                 }
 
                 // Change stroke to show visited cells
-                if (appSettings.showExploredCells && this.visitedCells.has(vecKey(this.cells[y][x].pos))) {
+                if (appSettings.showExploredCells && this.visitedCells.has(vecKey(c.pos))) {
                     stroke('rgba(50, 50, 50, 0.3)');
                 } else {
                     stroke('rgba(150, 150, 150, 0.1)');
@@ -111,12 +107,8 @@ function Grid(D) {
 
                 square(x * scale, y * scale, scale);
 
-                if (this.cells[y][x].desirability > 1) {
-                    fill(0, 0, 0);
-                    stroke(0, 0, 0);
-                    if (appSettings.showTargetQuantity) {
-                        text(this.cells[y][x].desirability, x * scale, y * scale);
-                    }
+                if (c.desirability > 1 && appSettings.showTargetQuantity) {
+                    text(c.desirability, x * scale, y * scale);
                 }
             }
         }

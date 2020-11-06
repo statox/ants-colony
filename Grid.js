@@ -149,6 +149,11 @@ function Grid(D) {
         for (let _ = 0; _ < emptiedTarget.size; _++) {
             this.createTarget();
         }
+        // Move the starting point if the settings say so
+        if (emptiedTarget.size > 0 && appSettings.startFromLastTarget) {
+            const v = emptiedTarget.values().next().value;
+            startingPoint = keyToVec(v);
+        }
 
         // Calculate the max amount of pheromones on a cell
         // And update the attraction of each cells with its new amount of pheromones

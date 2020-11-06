@@ -7,7 +7,7 @@ let appSettings = {
     showWalking: false,
     showExploredCells: true,
     showTargetQuantity: false,
-    showFPS: false,
+    showFPS: true,
     waitForSolution: true, // If true new target is regenerate only when a stable solution is found
     antPerceptionRadius: 2,
     antTTL: 50,
@@ -62,7 +62,6 @@ function draw() {
 
     walkingAnts = walkAnts();
     if (!appSettings.showWalking) {
-        frameRate(5);
         while (walkingAnts) {
             walkingAnts = walkAnts();
         }

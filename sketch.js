@@ -7,12 +7,13 @@ let appSettings = {
     showWalking: false,
     showExploredCells: true,
     showTargetQuantity: false,
+    waitForSolution: true, // If true new target is regenerate only when a stable solution is found
     antPerceptionRadius: 2,
     antTTL: 50,
-    targetMaxDesirability: 8000,
+    targetMaxDesirability: 1000,
     // These two constants are used to weight the desirability and pheromones in totalAttraction of cells
     desirabilityFactor: 1,
-    pheromonesFactor: 10,
+    pheromonesFactor: 5,
     nbTargets: 1 // nb of target cells to have constantly on the grid
 };
 let startingPoint = new p5.Vector(parseInt(D / 2), parseInt(D / 2));
@@ -64,6 +65,13 @@ function draw() {
     if (!walkingAnts) {
         grid.updatePheromones(ants);
         ants.forEach((a) => a.reset());
+    }
+
+    // Show text if we found a solution
+    if (appSettings.isAntPathStabilized) {
+        fill(0);
+        stroke(0);
+        text('Found solution', 30, 30);
     }
 }
 

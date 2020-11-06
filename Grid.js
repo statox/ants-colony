@@ -6,6 +6,7 @@ function Grid(D) {
     this.currentMaxPheromones = 0;
     this.maxDesirability = appSettings.targetMaxDesirability; // Initial desirability for targets
     this.visitedCells = new Set();
+    this.isPathStabilized = false;
 
     for (let y = 0; y < this.D; y++) {
         this.cells.push([]);
@@ -97,13 +98,24 @@ function Grid(D) {
         // Ants which found a target add pheromones proportionnaly to the length of their path
         const emptiedTarget = new Set();
         this.visitedCells = new Set();
+        const pathKeys = new Set();
         ants.forEach((ant) => {
             if (ant.foundTarget) {
-                ant.path.forEach((c) => (c.pheromones += D * D - ant.path.length));
+                let pathKey = '';
+                ant.path.forEach((c) => {
+                    pathKey += vecKey(c.pos);
+                    c.pheromones += D * D - ant.path.length;
+                });
+                // Keep a track of the different paths
+                pathKeys.add(pathKey);
                 const targetCell = ant.path[ant.path.length - 1];
 
                 // An ant found the target and took some food out of it
-                targetCell.desirability = targetCell.desirability - 1 || 1;
+                // Only if we don't wait for a solution or if we wait for
+                // a solution but found it
+                if (!appSettings.waitForSolution || this.isPathStabilized) {
+                    targetCell.desirability = targetCell.desirability - 1 || 1;
+                }
 
                 // If the target has no food anymore mark it
                 if (targetCell.desirability === 1) {
@@ -114,6 +126,10 @@ function Grid(D) {
             // Keep track of all the visited cells
             ant.path.forEach((c) => this.visitedCells.add(vecKey(c.pos)));
         });
+
+        // All the ants take the same path we have a solution
+        this.isPathStabilized = pathKeys.size === 1;
+        appSettings.isAntPathStabilized = this.isPathStabilized;
 
         // Regenerate a new target for each emptied one
         for (let _ = 0; _ < emptiedTarget.size; _++) {

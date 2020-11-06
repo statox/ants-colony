@@ -35,17 +35,31 @@ function Grid(D) {
         const x = parseInt(pos.x);
         const y = parseInt(pos.y);
 
-        // Avoid selecting a cell which is already a target
-        if (this.cells[y][x].desirability > 1) {
+        // Avoid selecting a cell which is already a target or which is an obstacle
+        if (this.cells[y][x].desirability > 1 || this.cells[y][x].isObstacle) {
             return this.createTarget();
         }
         this.cells[y][x].desirability = this.maxDesirability;
     };
 
+    this.createObstacles = () => {
+        for (let x = 23; x < 28; x++) {
+            this.cells[21][x].isObstacle = true;
+            this.cells[31][x].isObstacle = true;
+        }
+        for (let y = 24; y < 29; y++) {
+            this.cells[y][22].isObstacle = true;
+            this.cells[y][28].isObstacle = true;
+        }
+    };
+
     this.draw = () => {
         for (let y = 0; y < this.D; y++) {
             for (let x = 0; x < this.D; x++) {
-                if (this.cells[y][x].desirability > 1) {
+                if (this.cells[y][x].isObstacle) {
+                    // Obstacles are black
+                    fill('rgba(0, 0, 0, 0.2)');
+                } else if (this.cells[y][x].desirability > 1) {
                     // Targets are blue with brightness depending on how desirable they are
                     const rg = map(this.cells[y][x].desirability, 1, this.maxDesirability, 200, 100);
                     const b = map(this.cells[y][x].desirability, 1, this.maxDesirability, 200, 200);

@@ -14,7 +14,7 @@ let appSettings = {
     // These two constants are used to weight the desirability and pheromones in totalAttraction of cells
     desirabilityFactor: 1,
     pheromonesFactor: 5,
-    nbTargets: 10, // nb of target cells to have constantly on the grid
+    nbTargets: 1, // nb of target cells to have constantly on the grid
     startFromLastTarget: false // if true: when a target is finished use its position as the new starting point
 };
 let startingPoint = new p5.Vector(parseInt(D / 2), parseInt(D / 2));
@@ -45,6 +45,7 @@ function setup() {
 
     grid = new Grid(D, 1);
     grid.createTargets();
+    grid.createObstacles();
 
     for (let _ = 0; _ < nbAnts; _++) {
         ants.push(new Ant());

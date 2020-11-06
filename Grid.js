@@ -81,7 +81,7 @@ function Grid(D) {
                     fill(rg, rg, b);
                 } else if (c.pheromones === 0) {
                     // Empty are white
-                    fill(250, 250, 250);
+                    fill(230, 250, 230);
                 } else {
                     // Gradient on the amount of pheromones
                     const paint = map(c.pheromones, 0, this.currentMaxPheromones, 180, 10);
@@ -100,7 +100,7 @@ function Grid(D) {
 
                 // Change stroke to show visited cells
                 if (appSettings.showExploredCells && this.visitedCells.has(vecKey(c.pos))) {
-                    stroke('rgba(50, 50, 50, 0.3)');
+                    stroke('rgba(50, 50, 50, 0.2)');
                 } else {
                     stroke('rgba(150, 150, 150, 0.1)');
                 }

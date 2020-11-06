@@ -73,6 +73,11 @@ function draw() {
         ants.forEach((a) => a.reset());
     }
 
+    if (keyIsDown(CONTROL) && isMouseInScreen()) {
+        const {x, y} = mouseToXY();
+        grid.createObstacle(x, y);
+    }
+
     // Show text if we found a solution
     if (appSettings.isAntPathStabilized) {
         fill(0);
@@ -105,14 +110,11 @@ function walkAnts() {
 }
 
 function mousePressed() {
-    if (mouseX < 0 || mouseX > width || mouseY < 0 || mouseY > height) {
+    if (!isMouseInScreen()) {
         return;
     }
     // Get the mouse position in the grid
-    const mousePosition = new p5.Vector(mouseX, mouseY);
-    const inGridPosition = mousePosition.div(scale);
-    const x = parseInt(inGridPosition.x);
-    const y = parseInt(inGridPosition.y);
+    const {x, y} = mouseToXY();
     const c = grid.cells[y][x];
     if (c.desirability < grid.maxDesirability && !c.isObstacle) {
         // Create a new target if an empty cell is clicked
@@ -125,4 +127,16 @@ function mousePressed() {
         // Remove an obstacle if it is clicked on
         grid.removeObstacle(x, y);
     }
+}
+
+function isMouseInScreen() {
+    return !(mouseX < 0 || mouseX > width || mouseY < 0 || mouseY > height);
+}
+
+function mouseToXY() {
+    const mousePosition = new p5.Vector(mouseX, mouseY);
+    const inGridPosition = mousePosition.div(scale);
+    const x = parseInt(inGridPosition.x);
+    const y = parseInt(inGridPosition.y);
+    return new p5.Vector(x, y);
 }

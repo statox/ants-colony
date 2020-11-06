@@ -7,6 +7,7 @@ function Grid(D) {
     this.maxDesirability = appSettings.targetMaxDesirability; // Initial desirability for targets
     this.visitedCells = new Set();
     this.isPathStabilized = false;
+    this.stablePath; // will hold the solution when isPathStabilized is true
 
     for (let y = 0; y < this.D; y++) {
         this.cells.push([]);
@@ -58,6 +59,15 @@ function Grid(D) {
                     // Gradient on the amount of pheromones
                     const paint = map(this.cells[y][x].pheromones, 0, this.currentMaxPheromones, 250, 10);
                     fill(paint, 250, paint);
+                }
+
+                // if we have a solution show it but not the target
+                if (
+                    this.isPathStabilized &&
+                    this.stablePath.has(vecKey(this.cells[y][x].pos)) &&
+                    this.cells[y][x].desirability <= 1
+                ) {
+                    fill(200, 180, 180);
                 }
 
                 if (x === startingPoint.x && y === startingPoint.y) {
@@ -130,6 +140,10 @@ function Grid(D) {
         // All the ants take the same path we have a solution
         this.isPathStabilized = pathKeys.size === 1;
         appSettings.isAntPathStabilized = this.isPathStabilized;
+        // Use the first ant to get the solution (they now all follow the same path)
+        if (this.isPathStabilized) {
+            this.stablePath = ants[0].pathKeys;
+        }
 
         // Regenerate a new target for each emptied one
         for (let _ = 0; _ < emptiedTarget.size; _++) {

@@ -67,6 +67,23 @@ function Grid(D) {
         }
     };
 
+    this.createObstaclesRandom = () => {
+        const nbObstacles = 200;
+        let i = 0;
+        while (i < nbObstacles) {
+            console.log(i);
+            const v = new p5.Vector(1, 0);
+            v.setMag((Math.random() * D) / 2);
+            v.rotate(Math.random() * 2 * PI);
+            const x = parseInt(v.x + D / 2);
+            const y = parseInt(v.y + D / 2);
+            if (!this.cells[y][x].isObstacle) {
+                i++;
+                this.createObstacle(x, y);
+            }
+        }
+    };
+
     this.draw = () => {
         for (let y = 0; y < this.D; y++) {
             for (let x = 0; x < this.D; x++) {

@@ -46,7 +46,8 @@ function setup() {
 
     grid = new Grid(D, 1);
     grid.createTargets();
-    grid.createObstacles();
+    // grid.createObstacles();
+    // grid.createObstaclesRandom();
 
     for (let _ = 0; _ < nbAnts; _++) {
         ants.push(new Ant());

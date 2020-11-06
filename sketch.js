@@ -14,7 +14,7 @@ let appSettings = {
     // These two constants are used to weight the desirability and pheromones in totalAttraction of cells
     desirabilityFactor: 1,
     pheromonesFactor: 5,
-    nbTargets: 1, // nb of target cells to have constantly on the grid
+    minNbTargets: 1, // minimum nb of target cells to have constantly on the grid
     startFromLastTarget: false // if true: when a target is finished use its position as the new starting point
 };
 let startingPoint = new p5.Vector(parseInt(D / 2), parseInt(D / 2));
@@ -95,4 +95,16 @@ function walkAnts() {
         }
     });
     return walkingAnts;
+}
+
+function mousePressed() {
+    if (mouseX < 0 || mouseX > width || mouseY < 0 || mouseY > height) {
+        return;
+    }
+    // Create a new target if the mouse is clicked
+    const mousePosition = new p5.Vector(mouseX, mouseY);
+    const inGridPosition = mousePosition.div(scale);
+    inGridPosition.x = parseInt(inGridPosition.x);
+    inGridPosition.y = parseInt(inGridPosition.y);
+    grid.createTarget(inGridPosition.x, inGridPosition.y);
 }

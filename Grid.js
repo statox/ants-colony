@@ -17,16 +17,18 @@ function Grid(D) {
     }
 
     this.createTargets = () => {
-        for (_ = 0; _ < appSettings.nbTargets; _++) {
+        for (_ = 0; _ < appSettings.minNbTargets; _++) {
             this.createTarget();
         }
     };
 
-    this.createTarget = () => {
-        /*
-         * const x = parseInt(random(D));
-         * const y = parseInt(random(D));
-         */
+    this.createTarget = (dx, dy) => {
+        // If a position is given use it otherwise create a
+        // random target
+        if (dx != null && dy != null) {
+            this.cells[dy][dx].desirability = this.maxDesirability;
+            return;
+        }
         // Generate a target in a circle radius
         const pos = p5.Vector.random2D();
         const mag = map(Math.random(), 0, 1, D * 0.1, D * 0.4);
@@ -71,7 +73,7 @@ function Grid(D) {
                     // fill('rgba(250, 250, 250, 0.3)');
                 } else {
                     // Gradient on the amount of pheromones
-                    const paint = map(this.cells[y][x].pheromones, 0, this.currentMaxPheromones, 250, 10);
+                    const paint = map(this.cells[y][x].pheromones, 0, this.currentMaxPheromones, 180, 10);
                     fill(paint, 250, paint);
                 }
 
@@ -123,12 +125,15 @@ function Grid(D) {
         const emptiedTarget = new Set();
         this.visitedCells = new Set();
         const pathKeys = new Set();
+        const longestPathLength = Math.max(...ants.map((a) => a.path.length)); // used the calculate the amount of pheromones to leave
         ants.forEach((ant) => {
             if (ant.foundTarget) {
                 let pathKey = '';
                 ant.path.forEach((c) => {
                     pathKey += vecKey(c.pos);
-                    c.pheromones += D * D - ant.path.length;
+                    // Deposit pheromones proportionnaly to the longest path
+                    // so shorter path = more pheromones
+                    c.pheromones += longestPathLength - ant.path.length;
                 });
                 // Keep a track of the different paths
                 pathKeys.add(pathKey);
@@ -160,8 +165,11 @@ function Grid(D) {
         }
 
         // Regenerate a new target for each emptied one
-        for (let _ = 0; _ < emptiedTarget.size; _++) {
-            this.createTarget();
+        // only if we always want some targets on the grid
+        if (appSettings.minNbTargets > 0) {
+            for (let _ = 0; _ < emptiedTarget.size; _++) {
+                this.createTarget();
+            }
         }
         // Move the starting point if the settings say so
         if (emptiedTarget.size > 0 && appSettings.startFromLastTarget) {
@@ -171,7 +179,7 @@ function Grid(D) {
 
         // Calculate the max amount of pheromones on a cell
         // And update the attraction of each cells with its new amount of pheromones
-        // this.currentMaxPheromones = 0;
+        this.currentMaxPheromones = 0;
         for (let y = 0; y < this.D; y++) {
             for (let x = 0; x < this.D; x++) {
                 if (this.cells[y][x].pheromones > this.currentMaxPheromones) {

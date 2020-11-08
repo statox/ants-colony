@@ -11,11 +11,11 @@ let appSettings = {
     waitForSolution: true, // If true new target is regenerate only when a stable solution is found
     antPerceptionRadius: 2,
     antTTL: 50,
-    targetMaxDesirability: 1000,
     // These two constants are used to weight the desirability and pheromones in totalAttraction of cells
     desirabilityFactor: 1,
     pheromonesFactor: 5,
     minNbTargets: 1, // minimum nb of target cells to have constantly on the grid
+    targetMaxDesirability: 1000,
     startFromLastTarget: false // if true: when a target is finished use its position as the new starting point
 };
 let startingPoint = new p5.Vector(parseInt(D / 2), parseInt(D / 2));

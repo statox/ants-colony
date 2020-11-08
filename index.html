@@ -26,8 +26,50 @@
                 <p>These are the settings</p>
             </div>
             <div>
+                <h2>Simulation</h2>
                 <label for="showWalkingCheckbox">Show ants walking</label>
                 <input type="checkbox" id="showWalkingCheckbox" v-model="showWalking">
+
+                <label for="waitSolutionCheckbox">Wait for solution</label>
+                <input type="checkbox" id="waitSolutionCheckbox" v-model="waitForSolution">
+
+                <label for="startFromTargetCheckbox">Start from last target</label>
+                <input type="checkbox" id="startFromTargetCheckbox" v-model="startFromLastTarget">
+            </div>
+            <div>
+                <h2>UI</h2>
+                <label for="showVisitedCheckbox">Show visited cells</label>
+                <input type="checkbox" id="showVisitedCheckbox" v-model="showExploredCells">
+
+                <label for="showTargetQtyCheckbox">Show Targets quantity</label>
+                <input type="checkbox" id="showTargetQtyCheckbox" v-model="showTargetQuantity">
+
+                <label for="showFPSCheckbox">Show FPS</label>
+                <input type="checkbox" id="showFPSCheckbox" v-model="showFPS">
+            </div>
+            <div>
+                <h2>Ants</h2>
+                <label for="antTTLInput">Ant TTL</label>
+                <input type="number" id="antTTLInput" v-model="antTTL">
+
+                <label for="antPerceptionInput">Ant Perception radius</label>
+                <input type="number" id="antPerceptionInput" v-model="antPerceptionRadius">
+            </div>
+            <div>
+                <h2>Path tracking</h2>
+                <label for="desirabilityFactorInput">Desirability factor</label>
+                <input type="number" id="desirabilityFactorInput" v-model="desirabilityFactor">
+
+                <label for="pheromonesFactorInput">Pheromones factor</label>
+                <input type="number" id="pheromonesFactorInput" v-model="pheromonesFactor">
+            </div>
+            <div>
+                <h2>Targets</h2>
+                <label for="minNbTargetsInput">Minimum number of tagets</label>
+                <input type="number" id="minNbTargetsInput" v-model="minNbTargets">
+
+                <label for="targetMaxDesirabilityInput">Target qty. of food</label>
+                <input type="number" id="targetMaxDesirabilityInput" v-model="targetMaxDesirability">
             </div>
         </div>
     </div>

@@ -91,7 +91,7 @@ function Grid(D) {
 
                 // Show visited cells
                 if (appSettings.showExploredCells && this.visitedCells.has(vecKey(c.pos))) {
-                    stroke('rgba(50, 50, 50, 0.2)');
+                    stroke('rgba(200, 110, 230, 0.2)');
                     square(x * scale, y * scale, scale);
                 }
 

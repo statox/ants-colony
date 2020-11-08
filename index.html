@@ -2,7 +2,10 @@
 
 <head>
     <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="modal.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/p5/lib/p5.js"></script>
+    <script defer src="modal.js"></script>
     <script defer src="sketch.js"></script>
     <script defer src="Cell.js"></script>
     <script defer src="Grid.js"></script>
@@ -13,6 +16,24 @@
 </head>
 
 <body>
+    <!-- The Modal -->
+    <div id="settingsModal" class="modal">
+        <!-- Modal content -->
+        <div class="info-modal-content">
+            <span class="close">&times;</span>
+            <h1>Ant colony controls</h1>
+            <div>
+                <p>These are the settings</p>
+            </div>
+            <div>
+                <label for="showWalkingCheckbox">Show ants walking</label>
+                <input type="checkbox" id="showWalkingCheckbox" v-model="showWalking">
+            </div>
+        </div>
+    </div>
+
+    <!-- The Simulation -->
+    <div oncontextmenu="return false;" id="canvasDiv"></div>
 </body>
 
 </html>

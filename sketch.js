@@ -19,6 +19,7 @@ let appSettings = {
     startFromLastTarget: false // if true: when a target is finished use its position as the new starting point
 };
 let startingPoint = new p5.Vector(parseInt(D / 2), parseInt(D / 2));
+let settingsBtn;
 
 function keyToVec(s) {
     const [x, y] = s.split(':').map(Number);
@@ -41,8 +42,19 @@ function windowResized() {
 }
 
 function setup() {
-    createCanvas(700, 700);
+    const myCanvas = createCanvas(800, 800);
     customResizeCanvas();
+    myCanvas.parent('canvasDiv');
+
+    app = new Vue({
+        el: '#settingsModal',
+        data: appSettings
+    });
+    settingsBtn = createButton('Settings');
+    settingsBtn.position(10, 10);
+    settingsBtn.mousePressed(openModal);
+
+    initModal();
 
     grid = new Grid(D, 1);
     grid.createTargets();

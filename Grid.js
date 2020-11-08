@@ -92,7 +92,7 @@ function Grid(D) {
                 // Show visited cells
                 if (appSettings.showExploredCells && this.visitedCells.has(vecKey(c.pos))) {
                     stroke('rgba(50, 50, 50, 0.2)');
-                    circle(x * scale, y * scale, scale);
+                    square(x * scale, y * scale, scale);
                 }
 
                 // Show quantity
@@ -103,35 +103,35 @@ function Grid(D) {
                 }
 
                 noStroke();
-                fill(230, 250, 230); // Not sure we I need that here
+                fill(30, 50, 30); // Not sure we I need that here
 
                 if (c.isObstacle) {
                     // Obstacles are black
-                    fill('rgba(0, 0, 0, 0.2)');
-                    circle(x * scale, y * scale, scale);
+                    fill('rgba(0, 0, 0, 0.8)');
+                    square(x * scale, y * scale, scale);
                 } else if (c.desirability > 1) {
                     // Targets are blue with brightness depending on how desirable they are
                     const rg = map(c.desirability, 1, this.maxDesirability, 200, 100);
                     fill(rg, rg, 200);
-                    circle(x * scale, y * scale, scale);
+                    square(x * scale, y * scale, scale);
                 } else if (c.pheromones > 0) {
                     // Gradient on the amount of pheromones
-                    const paint = map(c.pheromones, 0, this.currentMaxPheromones, 180, 10);
-                    fill(paint, 250, paint);
-                    circle(x * scale, y * scale, scale);
+                    const paint = map(c.pheromones, 0, this.currentMaxPheromones, 80, 180);
+                    fill(30, paint, 30);
+                    square(x * scale, y * scale, scale);
                 }
 
                 // if we have a solution show it but not the target
                 if (this.isPathStabilized && this.stablePath.has(vecKey(c.pos)) && c.desirability <= 1) {
-                    fill(200, 180, 180);
-                    circle(x * scale, y * scale, scale);
+                    fill(50, 18, 18);
+                    square(x * scale, y * scale, scale);
                 }
             }
         }
 
         // Show the starting point
         fill(250, 0, 0);
-        circle(startingPoint.x * scale, startingPoint.y * scale, scale);
+        square(startingPoint.x * scale, startingPoint.y * scale, scale);
     };
 
     this.updatePheromones = (ants) => {

@@ -58,7 +58,7 @@ function setup() {
 let walkingAnts;
 function draw() {
     // frameRate(5);
-    background(230, 250, 230);
+    background(30, 50, 30);
     scale = width / grid.D;
     grid.draw();
 

@@ -63,11 +63,6 @@ function Ant() {
             const n = neighbors[i];
             totalScore += n.totalAttraction;
             cumulatedScores.push(totalScore);
-
-            // If a neighbors is a target go choose it directly
-            if (n.desirability > 1) {
-                return this.getCellInPath(n);
-            }
         }
 
         const selectedScore = Math.random() * totalScore;

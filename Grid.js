@@ -88,47 +88,50 @@ function Grid(D) {
         for (let y = 0; y < this.D; y++) {
             for (let x = 0; x < this.D; x++) {
                 const c = this.cells[y][x];
+
+                // Show visited cells
+                if (appSettings.showExploredCells && this.visitedCells.has(vecKey(c.pos))) {
+                    stroke('rgba(50, 50, 50, 0.2)');
+                    circle(x * scale, y * scale, scale);
+                }
+
+                // Show quantity
+                if (c.desirability > 1 && appSettings.showTargetQuantity) {
+                    stroke(0);
+                    fill(0);
+                    text(c.desirability, x * scale, y * scale - 10);
+                }
+
+                noStroke();
+                fill(230, 250, 230); // Not sure we I need that here
+
                 if (c.isObstacle) {
                     // Obstacles are black
                     fill('rgba(0, 0, 0, 0.2)');
+                    circle(x * scale, y * scale, scale);
                 } else if (c.desirability > 1) {
                     // Targets are blue with brightness depending on how desirable they are
                     const rg = map(c.desirability, 1, this.maxDesirability, 200, 100);
-                    const b = map(c.desirability, 1, this.maxDesirability, 200, 200);
-                    fill(rg, rg, b);
-                } else if (c.pheromones === 0) {
-                    // Empty are white
-                    fill(230, 250, 230);
-                } else {
+                    fill(rg, rg, 200);
+                    circle(x * scale, y * scale, scale);
+                } else if (c.pheromones > 0) {
                     // Gradient on the amount of pheromones
                     const paint = map(c.pheromones, 0, this.currentMaxPheromones, 180, 10);
                     fill(paint, 250, paint);
+                    circle(x * scale, y * scale, scale);
                 }
 
                 // if we have a solution show it but not the target
                 if (this.isPathStabilized && this.stablePath.has(vecKey(c.pos)) && c.desirability <= 1) {
                     fill(200, 180, 180);
-                }
-
-                // Show the starting point
-                if (x === startingPoint.x && y === startingPoint.y) {
-                    fill(250, 0, 0);
-                }
-
-                // Change stroke to show visited cells
-                if (appSettings.showExploredCells && this.visitedCells.has(vecKey(c.pos))) {
-                    stroke('rgba(50, 50, 50, 0.2)');
-                } else {
-                    stroke('rgba(150, 150, 150, 0.1)');
-                }
-
-                square(x * scale, y * scale, scale);
-
-                if (c.desirability > 1 && appSettings.showTargetQuantity) {
-                    text(c.desirability, x * scale, y * scale);
+                    circle(x * scale, y * scale, scale);
                 }
             }
         }
+
+        // Show the starting point
+        fill(250, 0, 0);
+        circle(startingPoint.x * scale, startingPoint.y * scale, scale);
     };
 
     this.updatePheromones = (ants) => {

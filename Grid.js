@@ -16,6 +16,29 @@ function Grid(D) {
         }
     }
 
+    this.isPositionInGrid = (x, y) => x > 0 && x < this.D && y >= 0 && y < this.D;
+
+    // Keep a list of all the reachabled cells for each cells depending on the
+    // perception radius
+    this.createCellsGraph = () => {
+        for (let y = 0; y < this.D; y++) {
+            for (let x = 0; x < this.D; x++) {
+                const c = this.cells[y][x];
+                const r = appSettings.antPerceptionRadius;
+                c.neighbors = [];
+                for (yoff = -r; yoff <= r; yoff++) {
+                    for (xoff = -r; xoff <= r; xoff++) {
+                        const xn = x + xoff;
+                        const yn = y + yoff;
+                        if (this.isPositionInGrid(xn, yn) && !(x === xn && y === yn)) {
+                            c.neighbors.push(this.cells[yn][xn]);
+                        }
+                    }
+                }
+            }
+        }
+    };
+
     this.createTargets = () => {
         for (_ = 0; _ < appSettings.minNbTargets; _++) {
             this.createTarget();
@@ -33,12 +56,13 @@ function Grid(D) {
         const pos = p5.Vector.random2D();
         const mag = map(Math.random(), 0, 1, D * 0.1, D * 0.4);
         pos.setMag(mag);
-        pos.add(new p5.Vector(D / 2, D / 2));
+        // pos.add(new p5.Vector(D / 2, D / 2));
+        pos.add(new p5.Vector(D * 0.7, D * 0.7));
         const x = parseInt(pos.x);
         const y = parseInt(pos.y);
 
         // Avoid selecting a cell which is already a target or which is an obstacle
-        if (this.cells[y][x].desirability > 1 || this.cells[y][x].isObstacle) {
+        if (!this.isPositionInGrid(x, y) || this.cells[y][x].desirability > 1 || this.cells[y][x].isObstacle) {
             return this.createTarget();
         }
         this.cells[y][x].desirability = this.maxDesirability;
@@ -71,7 +95,6 @@ function Grid(D) {
         const nbObstacles = 200;
         let i = 0;
         while (i < nbObstacles) {
-            console.log(i);
             const v = new p5.Vector(1, 0);
             v.setMag((Math.random() * D) / 2);
             v.rotate(Math.random() * 2 * PI);

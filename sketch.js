@@ -1,4 +1,4 @@
-const D = 50;
+const D = 100;
 let grid;
 let scale;
 let nbAnts = 200;
@@ -10,7 +10,7 @@ let appSettings = {
     showFPS: true,
     waitForSolution: true, // If true new target is regenerate only when a stable solution is found
     antPerceptionRadius: 2,
-    antTTL: 50,
+    antTTL: 150,
     // These two constants are used to weight the desirability and pheromones in totalAttraction of cells
     desirabilityFactor: 1,
     pheromonesFactor: 5,
@@ -59,7 +59,8 @@ function setup() {
     grid = new Grid(D, 1);
     grid.createTargets();
     // grid.createObstacles();
-    // grid.createObstaclesRandom();
+    grid.createObstaclesRandom();
+    grid.createCellsGraph();
 
     for (let _ = 0; _ < nbAnts; _++) {
         ants.push(new Ant());
@@ -94,15 +95,15 @@ function draw() {
 
     // Show text if we found a solution
     if (appSettings.isAntPathStabilized) {
-        fill(0);
-        stroke(0);
+        fill(200);
+        stroke(200);
         text('Found solution', 30, 30);
     }
 
     // Show FPS
     if (appSettings.showFPS) {
-        fill(0);
-        stroke(0);
+        fill(200);
+        stroke(200);
         text(`FPS: ${parseInt(frameRate())}`, 30, height - 30);
     }
 }

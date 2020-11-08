@@ -18,42 +18,40 @@ function Ant() {
 
     this.getUnivisitedNeighbors = () => {
         const {x, y} = this.pos;
+        const currentCell = grid.cells[y][x];
 
-        const neighbors = [];
-
-        // Get all the possible neighbors position within the perception radius
-        // And also get the cell next to the ant which is in the path of this neighbor
-        const perception = appSettings.antPerceptionRadius;
-        const destinations = [];
-        for (let yd = y - perception; yd <= y + perception; yd++) {
-            for (let xd = x - perception; xd <= x + perception; xd++) {
-                destinations.push(new p5.Vector(xd, yd));
-            }
-        }
-
-        // filter the out of grid positions, the ones already visited and the obstacles
-        destinations.forEach((idealDestinationPos) => {
-            const {x, y} = idealDestinationPos;
-            if (x > 0 && x < D && y > 0 && y < D && !this.pathKeys.has(xyKey(x, y))) {
-                if (!this.getCellInPath(idealDestinationPos).isObstacle) {
-                    neighbors.push(grid.cells[y][x]);
-                }
-            }
+        // Filter already visited neighbors and the obstacles
+        return currentCell.neighbors.filter((possibleDestination) => {
+            const alreadyVisited = this.pathKeys.has(possibleDestination.key);
+            const notAnObstacle = !this.getCellInPath(possibleDestination).isObstacle;
+            return !alreadyVisited && notAnObstacle;
         });
-
-        return neighbors;
     };
 
-    // Given the current position and an ideal destination
+    // Given the current position and a desired destination
     // Return the neighbor in a radius 1 going in the right direction
-    this.getCellInPath = (idealDestinationPos) => {
-        const diff = idealDestinationPos.copy().sub(this.pos);
-        diff.setMag(1);
-        const destinationPos = this.pos.copy().add(diff);
-        destinationPos.x = Math.round(destinationPos.x);
-        destinationPos.y = Math.round(destinationPos.y);
+    this.getCellInPath = (idealDestination) => {
+        const {x, y} = this.pos;
+        const {x: xn, y: yn} = idealDestination.pos;
 
-        return grid.cells[destinationPos.y][destinationPos.x];
+        // top row
+        if (yn < y) {
+            if (xn < x) return grid.cells[y - 1][x - 1];
+            if (xn > x) return grid.cells[y - 1][x + 1];
+            return grid.cells[y - 1][x];
+        }
+        // same row
+        if (yn === y) {
+            if (xn < x) return grid.cells[y][x - 1];
+            if (xn > x) return grid.cells[y][x + 1];
+            return grid.cells[y][x]; // shouldn't happen
+        }
+        // bottom row
+        if (yn > y) {
+            if (xn < x) return grid.cells[y + 1][x - 1];
+            if (xn > x) return grid.cells[y + 1][x + 1];
+            return grid.cells[y + 1][x];
+        }
     };
 
     this.chooseDestination = (neighbors) => {
@@ -68,7 +66,7 @@ function Ant() {
 
             // If a neighbors is a target go choose it directly
             if (n.desirability > 1) {
-                return this.getCellInPath(n.pos);
+                return this.getCellInPath(n);
             }
         }
 
@@ -76,7 +74,7 @@ function Ant() {
 
         for (let i = 0; i < neighbors.length; i++) {
             if (selectedScore <= cumulatedScores[i]) {
-                return this.getCellInPath(neighbors[i].pos);
+                return this.getCellInPath(neighbors[i]);
             }
         }
     };
@@ -103,7 +101,8 @@ function Ant() {
         this.ttl--;
         this.pos = destination.pos;
         this.path.push(destination);
-        this.pathKeys.add(vecKey(this.pos));
+        this.pathKeys.add(destination.key);
+
         // Stop walking if you are on a target
         if (destination.desirability > 1) {
             this.ttl = 0;

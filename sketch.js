@@ -144,7 +144,7 @@ function mousePressed() {
 }
 
 function isMouseInScreen() {
-    return !(mouseX < 0 || mouseX > width || mouseY < 0 || mouseY > height);
+    return !(mouseX < 0 || mouseX > width || mouseY < 0 || mouseY > height) && !isModalShown();
 }
 
 function mouseToXY() {

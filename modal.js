@@ -26,3 +26,8 @@ function openModal() {
     modal.style.display = 'block';
     noLoop();
 }
+
+function isModalShown() {
+    var modal = document.getElementById('settingsModal');
+    return modal.style.display && modal.style.display !== 'none';
+}
